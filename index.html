@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="description" content="gg占卜 — 每日随机占卜，签文、幸运指数、宜忌一览" />
+  <meta name="theme-color" content="#0a0a0a" />
+  <title>gg占卜</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body class="theme-dark">
+  <canvas id="starfield" aria-hidden="true"></canvas>
+  <div class="bg-glow bg-glow-a" aria-hidden="true"></div>
+  <div class="bg-glow bg-glow-b" aria-hidden="true"></div>
+
+  <button class="theme-toggle glass" id="themeToggle" type="button" aria-label="切换主题">
+    <span class="theme-icon">☀</span>
+  </button>
+
+  <main class="container">
+    <header class="hero" id="hero">
+      <p class="brand">gg占卜</p>
+      <h1 class="main-title">今日占卜</h1>
+      <p class="main-subtitle" id="subtitle">静候命运低语</p>
+    </header>
+
+    <section class="action-wrap" id="actionWrap">
+      <button class="start-btn glass" id="startBtn" type="button">开始占卜</button>
+    </section>
+
+    <section class="result-card glass hidden" id="resultCard" aria-live="polite">
+      <div class="card-header">
+        <span class="card-label">签文</span>
+        <div class="divider"></div>
+      </div>
+      <p class="fortune-text" id="fortuneText"></p>
+
+      <div class="stars-row">
+        <span class="meta-label">幸运指数</span>
+        <div class="stars" id="starsEl" aria-label="幸运指数"></div>
+      </div>
+
+      <div class="info-grid">
+        <div class="info-item glass-inner">
+          <span class="info-label">幸运颜色</span>
+          <span class="info-value" id="luckyColor"></span>
+        </div>
+        <div class="info-item glass-inner">
+          <span class="info-label">幸运方向</span>
+          <span class="info-value" id="luckyDirection"></span>
+        </div>
+        <div class="info-item glass-inner info-wide">
+          <span class="info-label">宜</span>
+          <span class="info-value" id="luckyYi"></span>
+        </div>
+        <div class="info-item glass-inner info-wide">
+          <span class="info-label">忌</span>
+          <span class="info-value" id="luckyJi"></span>
+        </div>
+      </div>
+
+      <button class="retry-btn" id="retryBtn" type="button">再次占卜</button>
+    </section>
+
+    <footer class="footer hidden" id="footer">
+      <p class="footer-text" id="updateTime"></p>
+    </footer>
+  </main>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
