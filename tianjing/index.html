@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="description" content="天晶观命 — 紫微斗数在线排盘，输入生辰即可生成命盘与解读" />
+  <meta name="theme-color" content="#0a0a0a" />
+  <title>天晶观命</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body class="theme-dark">
+  <canvas id="starfield" aria-hidden="true"></canvas>
+  <div class="bg-glow bg-glow-a" aria-hidden="true"></div>
+  <div class="bg-glow bg-glow-b" aria-hidden="true"></div>
+
+  <button class="theme-toggle glass" id="themeToggle" type="button" aria-label="切换主题">
+    <span class="theme-icon">☀</span>
+  </button>
+
+  <main class="container">
+    <header class="hero">
+      <p class="brand">天晶观命</p>
+      <h1 class="main-title">在线排盘</h1>
+      <p class="main-subtitle">输入生辰，观星立命</p>
+    </header>
+
+    <section class="form-card glass" id="formCard">
+      <form id="birthForm" class="birth-form">
+        <label class="field">
+          <span class="field-label">出生日期（阳历）</span>
+          <input type="date" id="birthDate" required min="1900-01-01" max="2099-12-31" />
+        </label>
+
+        <label class="field">
+          <span class="field-label">出生时辰</span>
+          <select id="birthTime" required>
+            <option value="0">子时 (23:00–01:00)</option>
+            <option value="1">丑时 (01:00–03:00)</option>
+            <option value="2">寅时 (03:00–05:00)</option>
+            <option value="3">卯时 (05:00–07:00)</option>
+            <option value="4">辰时 (07:00–09:00)</option>
+            <option value="5">巳时 (09:00–11:00)</option>
+            <option value="6" selected>午时 (11:00–13:00)</option>
+            <option value="7">未时 (13:00–15:00)</option>
+            <option value="8">申时 (15:00–17:00)</option>
+            <option value="9">酉时 (17:00–19:00)</option>
+            <option value="10">戌时 (19:00–21:00)</option>
+            <option value="11">亥时 (21:00–23:00)</option>
+          </select>
+        </label>
+
+        <fieldset class="field gender-field">
+          <legend class="field-label">性别</legend>
+          <div class="gender-options">
+            <label class="radio-pill"><input type="radio" name="gender" value="男" checked /> 男</label>
+            <label class="radio-pill"><input type="radio" name="gender" value="女" /> 女</label>
+          </div>
+        </fieldset>
+
+        <button class="submit-btn" type="submit">开始排盘</button>
+      </form>
+    </section>
+
+    <section class="result-section hidden" id="resultSection">
+      <div class="meta-card glass">
+        <div class="meta-grid">
+          <div class="meta-item">
+            <span class="meta-key">阳历</span>
+            <span class="meta-val" id="metaSolar"></span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-key">农历</span>
+            <span class="meta-val" id="metaLunar"></span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-key">四柱</span>
+            <span class="meta-val" id="metaPillars"></span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-key">五行局</span>
+            <span class="meta-val" id="metaFive"></span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-key">生肖</span>
+            <span class="meta-val" id="metaZodiac"></span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-key">星座</span>
+            <span class="meta-val" id="metaSign"></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="chart-wrap glass">
+        <h2 class="section-title">命盘十二宫</h2>
+        <div class="chart-grid" id="chartGrid"></div>
+      </div>
+
+      <div class="analysis-wrap glass">
+        <div class="tab-bar" id="tabBar" role="tablist">
+          <button class="tab-btn active" type="button" data-tab="ai" role="tab">AI 解盘</button>
+          <button class="tab-btn" type="button" data-tab="palaces" role="tab">十二宫</button>
+          <button class="tab-btn" type="button" data-tab="horoscope" role="tab">大限流年</button>
+          <button class="tab-btn" type="button" data-tab="mutagen" role="tab">四化飞星</button>
+          <button class="tab-btn" type="button" data-tab="patterns" role="tab">格局</button>
+          <button class="tab-btn" type="button" data-tab="stars" role="tab">星宿</button>
+        </div>
+
+        <div class="tab-panel active" id="panel-ai" role="tabpanel">
+          <h2 class="section-title">AI 智能解盘</h2>
+          <div id="aiPanel"></div>
+        </div>
+
+        <div class="tab-panel" id="panel-palaces" role="tabpanel">
+          <h2 class="section-title">十二宫解读（通俗版）</h2>
+          <p class="panel-hint">用大白话对照生活，涵盖性格、工作、感情、健康等现实场景。</p>
+          <div class="reading-list" id="palaceList"></div>
+        </div>
+
+        <div class="tab-panel" id="panel-horoscope" role="tabpanel">
+          <h2 class="section-title">大限 · 流年</h2>
+          <div id="horoscopePanel"></div>
+        </div>
+
+        <div class="tab-panel" id="panel-mutagen" role="tabpanel">
+          <h2 class="section-title">四化飞星</h2>
+          <p class="panel-hint">生年、大限、流年四化，以及宫干飞化方向。</p>
+          <div id="mutagenPanel"></div>
+        </div>
+
+        <div class="tab-panel" id="panel-patterns" role="tabpanel">
+          <h2 class="section-title">格局分析</h2>
+          <p class="pattern-summary" id="patternSummary"></p>
+          <div class="reading-list" id="patternList"></div>
+        </div>
+
+        <div class="tab-panel" id="panel-stars" role="tabpanel">
+          <h2 class="section-title">星宿介绍</h2>
+          <p class="panel-hint">以下为命盘中出现的星曜详解</p>
+          <div class="reading-list" id="starList"></div>
+        </div>
+      </div>
+
+      <button class="retry-btn" id="retryBtn" type="button">重新排盘</button>
+    </section>
+
+    <div id="historyMount"></div>
+  </main>
+
+  <footer class="site-footer">
+    <p class="footer-copy">© Wax Copyright · 仅供娱乐与文化学习 · 基于 iztro 开源排盘引擎</p>
+    <p class="footer-contact">联系作者：<a href="mailto:Jarad101@outlook.com">Jarad101@outlook.com</a></p>
+    <p class="footer-link"><a href="../">← gg占卜</a></p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/iztro@2.5.3/dist/iztro.min.js"></script>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
